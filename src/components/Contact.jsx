@@ -1,9 +1,19 @@
-import React from 'react'
+import React, { useRef, useState } from 'react';
 
 const Contact = () => {
-  return (
-    <div>Contact</div>
-  )
-}
+  const formRef = useRef();
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+  const [loading, setLoading] = useState(false);
 
-export default Contact
+  const handleChange = (e) => {}
+
+  const handleSubmit = (e) => {}
+  
+  return <div>Contact</div>;
+};
+
+export default Contact;
