@@ -6,6 +6,11 @@ import { slideIn } from '../utils/motion';
 import { styles } from '../styles';
 import { SectionWrapper } from '../hoc';
 import { EarthCanvas } from './canvas';
+import emailjs from '@emailjs/browser';
+
+//template_g7zwiuc
+//service_5pom6jg
+//Z5Fm9Ae9mjBCeXATH
 
 const Contact = () => {
   const formRef = useRef();
@@ -16,9 +21,47 @@ const Contact = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
 
-  const handleSubmit = (e) => {};
+    setForm({ ...form, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    emailjs
+      .send(
+        import.meta.env.VITE_MAILER_SERVICE_ID,
+        import.meta.env.VITE_CONTACT_US_TEMPLATE_ID,
+        {
+          from_name: form.name,
+          to_name: 'Rashid',
+          from_email: form.email,
+          to_email: 'rashidfirhat98@gmail.com',
+          message: form.message,
+        },
+        import.meta.env.VITE_MAILER_PUBLIC_KEY
+      )
+      .then(
+        () => {
+          setLoading(false);
+          alert('Thank you. I will get back to you as soon as possible');
+
+          setForm({
+            name: '',
+            email: '',
+            message: '',
+          });
+        },
+        (error) => {
+          setLoading(false);
+          console.error(error);
+          alert('Something went wrong.');
+        }
+      );
+  };
 
   return (
     <div className="xl:mt-12 flex xl:flex-row flex-col-reverse gap-10 overflow-hidden">
@@ -65,7 +108,7 @@ const Contact = () => {
               name="message"
               value={form.message}
               onChange={handleChange}
-              placeholder="What's your name?"
+              placeholder="What do you want to say?"
               className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white 
               rounded-lg outlined-none border-none font-medium"
             />
